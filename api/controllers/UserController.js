@@ -16,7 +16,7 @@ const UserController = () => {
       const token = authService().issue({ id: user.id, authorigy: user.authorigy });
       return res.status(200).json({ ...mapping.ok, data: { token, user } });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return res.status(500).json({ ...mapping.internal_error });
     }
   };
@@ -44,7 +44,7 @@ const UserController = () => {
         }
         return res.status(401).json({ ...mapping.unauthorized });
       } catch (err) {
-        console.log(err);
+        console.error(err);
         return res.status(500).json({ ...mapping.internal_error });
       }
     }
@@ -63,12 +63,13 @@ const UserController = () => {
 
   const getAll = async (req, res) => {
     try {
-      let { pageSize = 10, page = 1, sort = 'id.asc' } = req.query;
+      let { pageSize = 10, currentPage = 1 } = req.query;
+      const { sort = 'id.asc' } = req.query;
       pageSize = parseInt(pageSize, 10);
-      page = parseInt(pageSize, 10);
+      currentPage = parseInt(currentPage, 10);
       const { count } = await User.findAndCountAll();
       const pages = Math.ceil(count / pageSize);
-      const offset = pageSize * (page - 1);
+      const offset = pageSize * (currentPage - 1);
       const order = parseSort(sort);
       const users = await User.findAll({
         limit: pageSize,
@@ -79,14 +80,14 @@ const UserController = () => {
         ...mapping.ok,
         data: {
           count,
-          page,
-          pages,
+          currentPage,
           pageSize,
+          pages,
           users,
         },
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return res.status(500).json({ ...mapping.internal_error });
     }
   };
@@ -155,12 +156,30 @@ const UserController = () => {
     // params is part of an url
     const { id } = req.params;
     try {
-      const user = User.findById(id);
+      const user = await User.findById(id);
       if (!user) {
         return res.status(400).json({ ...mapping.bad_request_user_not_found });
       }
       await user.destroy();
       return res.status(200).json({ ...mapping.ok, data: { user } });
+    } catch (err) {
+      // better save it to log file
+      console.error(err);
+      return res.status(500).json({ ...mapping.internal_error });
+    }
+  };
+
+  const batchDestroy = async (req, res) => {
+    // params is part of an url
+    const { id = [] } = req.body;
+    try {
+      id.forEach(async (idValue) => {
+        const user = await User.findById(idValue);
+        if (user) {
+          // await user.destroy();
+        }
+      });
+      return res.status(200).json({ ...mapping.ok, data: { id } });
     } catch (err) {
       // better save it to log file
       console.error(err);
@@ -177,6 +196,7 @@ const UserController = () => {
     create,
     update,
     destroy,
+    batchDestroy,
   };
 };
 

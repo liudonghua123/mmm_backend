@@ -50,6 +50,7 @@ app.use('/api/public', mappedOpenRoutes);
 app.use('/api/private', mappedAuthRoutes);
 
 server.listen(config.port, () => {
+  console.info(`app is running on port ${config.port}`)
   if (environment !== 'production' && environment !== 'development' && environment !== 'testing') {
     console.error(`NODE_ENV is set to ${environment}, but only production and development are valid.`);
     process.exit(1);
