@@ -1,0 +1,7 @@
+version: '3'
+services:
+  mmm-backend:
+    build: .
+    ports:
+      - '2017'
+    restart: always
