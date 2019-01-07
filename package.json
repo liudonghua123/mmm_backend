@@ -15,7 +15,7 @@
     "prestart-disable": "npm run drop-sqlite-db || true",
     "start": "npm run nodemon",
     "poststart-disable": "npm run create-sqlite-db",
-    "dev": "cross-env NODE_ENV=development node --inspect-brk ./api/api.js",
+    "dev": "cross-env NODE_ENV=development node ./api/api.js",
     "nodemon": "nodemon --exec npm run dev",
     "create-sqlite-db": "shx touch ./db/database.sqlite",
     "drop-sqlite-db": "shx rm ./db/database.sqlite",
