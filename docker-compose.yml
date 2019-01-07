@@ -4,4 +4,7 @@ services:
     build: .
     ports:
       - '2017'
+    volumes:
+      - ./db:/app/db
+      - ./build:/app/build
     restart: always
