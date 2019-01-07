@@ -8,3 +8,4 @@ services:
       - ./db:/app/db
       - ./build:/app/build
     restart: always
+    network_mode: bridge
