@@ -17,7 +17,7 @@ const UserController = () => {
       return res.status(200).json({ ...mapping.ok, data: { token, user } });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error });
+      return res.status(500).json({ ...mapping.internal_error, data: err });
     }
   };
 
@@ -88,7 +88,7 @@ const UserController = () => {
       });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error });
+      return res.status(500).json({ ...mapping.internal_error, data: err });
     }
   };
 
@@ -108,7 +108,7 @@ const UserController = () => {
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error });
+      return res.status(500).json({ ...mapping.internal_error, data: err });
     }
   };
 
@@ -120,12 +120,12 @@ const UserController = () => {
       const createdUser = await User.create({
         ...body,
       });
-      console.info(`created user ${JSON.stringify(createdUser, null, 2)}`);
+      // console.info(`created user ${JSON.stringify(createdUser, null, 2)}`);
       return res.status(200).json({ ...mapping.ok, data: { user: createdUser } });
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error });
+      return res.status(500).json({ ...mapping.internal_error, data: err });
     }
   };
 
@@ -139,16 +139,18 @@ const UserController = () => {
       if (!user) {
         return res.status(400).json({ ...mapping.bad_request_user_not_found });
       }
-      const updatedUser = await user.update({
+      const needUpdateUser = {
+        ...user,
         ...body,
         id,
-      });
-      console.info(`update user ${JSON.stringify(updatedUser, null, 2)}`);
+      };
+      const updatedUser = await user.update(needUpdateUser);
+      // console.info(`update user ${JSON.stringify(updatedUser, null, 2)}`);
       return res.status(200).json({ ...mapping.ok, data: { updatedUser } });
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error });
+      return res.status(500).json({ ...mapping.internal_error, data: err });
     }
   };
 
@@ -165,7 +167,7 @@ const UserController = () => {
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error });
+      return res.status(500).json({ ...mapping.internal_error, data: err });
     }
   };
 
@@ -176,14 +178,14 @@ const UserController = () => {
       id.forEach(async (idValue) => {
         const user = await User.findById(idValue);
         if (user) {
-          // await user.destroy();
+          await user.destroy();
         }
       });
       return res.status(200).json({ ...mapping.ok, data: { id } });
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error });
+      return res.status(500).json({ ...mapping.internal_error, data: err });
     }
   };
 
