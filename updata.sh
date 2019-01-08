@@ -5,7 +5,7 @@ OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 function do_update_frontend() {
     (
-        echo 'update the backend'
+        echo 'update the frontend'
         cd ../mmm/
         git pull
         npm run build
@@ -13,7 +13,7 @@ function do_update_frontend() {
 }
 
 function do_update_backend() {
-    echo 'update the frontend'
+    echo 'update the backend'
     git pull
     docker-compose build
     docker-compose up -d
