@@ -4,6 +4,7 @@ const bcryptService = require('../services/bcrypt.service');
 const mapping = require('../utils/CodeMessageMapping');
 const { parseSort } = require('../utils/tools');
 const { Op } = require('sequelize');
+const { debug } = require('../../config');
 
 const UserController = () => {
   const register = async (req, res) => {
@@ -17,7 +18,9 @@ const UserController = () => {
       return res.status(200).json({ ...mapping.ok, data: { token, user } });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error, data: err });
+      return res
+        .status(500)
+        .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
     }
   };
 
@@ -32,7 +35,7 @@ const UserController = () => {
           },
         });
         if (!user) {
-          return res.status(400).json({ ...mapping.bad_request_username_password_mismatch });
+          return res.status(400).json({ ...mapping.bad_request_user_not_found });
         }
         if (bcryptService().comparePassword(password, user.password)) {
           const token = authService().issue({ id: user.id, authority: user.authority });
@@ -42,10 +45,12 @@ const UserController = () => {
             data: { token, user },
           });
         }
-        return res.status(401).json({ ...mapping.unauthorized });
+        return res.status(401).json({ ...mapping.bad_request_username_password_mismatch });
       } catch (err) {
         console.error(err);
-        return res.status(500).json({ ...mapping.internal_error });
+        return res
+          .status(500)
+          .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
       }
     }
     return res.status(400).json({ ...mapping.bad_request_username_password_wrong });
@@ -88,7 +93,9 @@ const UserController = () => {
       });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error, data: err });
+      return res
+        .status(500)
+        .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
     }
   };
 
@@ -108,7 +115,9 @@ const UserController = () => {
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error, data: err });
+      return res
+        .status(500)
+        .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
     }
   };
 
@@ -125,7 +134,9 @@ const UserController = () => {
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error, data: err });
+      return res
+        .status(500)
+        .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
     }
   };
 
@@ -150,7 +161,9 @@ const UserController = () => {
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error, data: err });
+      return res
+        .status(500)
+        .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
     }
   };
 
@@ -167,7 +180,9 @@ const UserController = () => {
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error, data: err });
+      return res
+        .status(500)
+        .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
     }
   };
 
@@ -185,7 +200,9 @@ const UserController = () => {
     } catch (err) {
       // better save it to log file
       console.error(err);
-      return res.status(500).json({ ...mapping.internal_error, data: err });
+      return res
+        .status(500)
+        .json(debug ? { ...mapping.internal_error, data: err } : { ...mapping.internal_error });
     }
   };
 
