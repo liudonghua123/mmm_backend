@@ -6,6 +6,7 @@ const config = {
   privateRoutes,
   publicRoutes,
   port: process.env.PORT || '2017',
+  debug: process.env.NODE_ENV !== 'production',
 };
 
 module.exports = config;
