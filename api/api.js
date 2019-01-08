@@ -52,7 +52,7 @@ app.all('/api/private/*', (req, res, next) => auth(req, res, next));
 app.use('/api/public', mappedOpenRoutes);
 app.use('/api/private', mappedAuthRoutes);
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 server.listen(config.port, () => {
