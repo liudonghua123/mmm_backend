@@ -1,7 +1,10 @@
 const Sequelize = require('sequelize');
+const moment = require('moment');
 const bcryptService = require('../services/bcrypt.service');
 
 const sequelize = require('../../config/database');
+
+const dateFormat = 'YYYY-MM-DD';
 
 const hooks = {
   beforeCreate(user) {
@@ -12,6 +15,15 @@ const hooks = {
       user.password = bcryptService().password(user); // eslint-disable-line no-param-reassign
     }
   },
+};
+
+const datePropertyGetter = (context, property) =>
+  (context.getDataValue(property) ? moment(context.getDataValue(property)).format(dateFormat) : '');
+
+const datePropertySetter = (context, property, val) => {
+  if (val) {
+    context.setDataValue(property, moment(val).format(dateFormat));
+  }
 };
 
 const tableName = 'users';
@@ -54,13 +66,23 @@ const User = sequelize.define(
     },
     arrivalDate: {
       type: Sequelize.DATE,
-      defaultValue: '',
       field: 'arrival_date',
+      get() {
+        return datePropertyGetter(this, 'arrivalDate');
+      },
+      set(val) {
+        datePropertySetter(this, 'arrivalDate', val);
+      },
     },
     departureDate: {
       type: Sequelize.DATE,
-      defaultValue: '',
       field: 'departure_date',
+      get() {
+        return datePropertyGetter(this, 'departureDate');
+      },
+      set(val) {
+        datePropertySetter(this, 'departureDate', val);
+      },
     },
     room: {
       type: Sequelize.STRING,
@@ -69,7 +91,7 @@ const User = sequelize.define(
     dietRequirement: {
       type: Sequelize.STRING,
       defaultValue: '',
-      field: 'departure_date',
+      field: 'diet_requirement',
     },
     talkTitle: {
       type: Sequelize.STRING,
@@ -87,7 +109,7 @@ const User = sequelize.define(
     },
     status: {
       type: Sequelize.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     },
     authority: {
       type: Sequelize.STRING,
