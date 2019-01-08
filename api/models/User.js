@@ -7,6 +7,11 @@ const hooks = {
   beforeCreate(user) {
     user.password = bcryptService().password(user); // eslint-disable-line no-param-reassign
   },
+  beforeUpdate(user) {
+    if (user.changed('password')) {
+      user.password = bcryptService().password(user); // eslint-disable-line no-param-reassign
+    }
+  },
 };
 
 const tableName = 'users';
