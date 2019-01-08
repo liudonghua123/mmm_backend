@@ -8,7 +8,9 @@
             "error",
             "always"
         ],
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "no-console": "off",
+        "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"]
     },
     "env": {
         "jest": true
