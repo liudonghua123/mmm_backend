@@ -41,11 +41,6 @@ const User = sequelize.define(
       defaultValue: '',
       allowNull: false,
     },
-    name: {
-      type: Sequelize.STRING,
-      defaultValue: '',
-      allowNull: false,
-    },
     password: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -55,6 +50,10 @@ const User = sequelize.define(
       unique: true,
       defaultValue: '',
       allowNull: false,
+    },
+    name: {
+      type: Sequelize.STRING,
+      defaultValue: '',
     },
     gender: {
       type: Sequelize.STRING,
