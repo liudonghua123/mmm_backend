@@ -40,7 +40,12 @@ app.use(helmet({
 }));
 
 // serve static files
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../build'), {
+  setHeaders: (res, filePath, stat) => {
+    console.info(`static file ${filePath} served`);
+    res.set('x-timestamp', Date.now());
+  },
+}));
 // parsing the request bodys
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
