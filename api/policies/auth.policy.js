@@ -7,9 +7,15 @@ const hasPermission = (req, authority) => {
     { method: 'GET', path: '/api/private/users/' },
     { method: 'POST', path: '/api/private/users/' },
     { method: 'DELETE', path: '/api/private/users/' },
+    { method: 'POST', path: '/api/private/notifications/' },
+    { method: 'PUT', path: '/api/private/notifications/\\d+' },
+    { method: 'DELETE', path: '/api/private/notifications/' },
   ];
   for (const adminRoute of adminRoutes) {
-    if (req.method === adminRoute.method && req.path === adminRoute.path) {
+    // eg: "/api/private/notifications/1".match(new RegExp('/api/private/notifications/\\d+')) returns
+    // ["/api/private/notifications/1", index: 0, input: "/api/private/notifications/1", groups: undefined]
+    // otherwise return null
+    if (req.method === adminRoute.method && req.path.match(new RegExp(adminRoute.path))) {
       return authority === 'admin';
     }
   }

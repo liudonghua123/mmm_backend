@@ -18,6 +18,7 @@ const mapping = {
     code: 9,
     message: 'Authorization privilege not sufficient',
   },
+  bad_request_notification_not_found: { code: 5, message: 'Bad Request: Notification not found' },
 };
 
 module.exports = mapping;
