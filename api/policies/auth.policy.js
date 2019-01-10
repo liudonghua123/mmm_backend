@@ -4,12 +4,12 @@ const mapping = require('../utils/CodeMessageMapping');
 const hasPermission = (req, authority) => {
   console.info(`check permission for ${req.method}: ${req.path} with authority: ${authority}`);
   const adminRoutes = [
-    { method: 'GET', path: '/api/private/users/' },
-    { method: 'POST', path: '/api/private/users/' },
-    { method: 'DELETE', path: '/api/private/users/' },
-    { method: 'POST', path: '/api/private/notifications/' },
-    { method: 'PUT', path: '/api/private/notifications/\\d+' },
-    { method: 'DELETE', path: '/api/private/notifications/' },
+    { method: 'GET', path: '^/api/private/users/$' },
+    { method: 'POST', path: '^/api/private/users/$' },
+    { method: 'DELETE', path: '^/api/private/users/$' },
+    { method: 'POST', path: '^/api/private/notifications/$' },
+    { method: 'PUT', path: '^/api/private/notifications/\\d+$' },
+    { method: 'DELETE', path: '^/api/private/notifications/$' },
   ];
   for (const adminRoute of adminRoutes) {
     // eg: "/api/private/notifications/1".match(new RegExp('/api/private/notifications/\\d+')) returns
