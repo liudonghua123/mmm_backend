@@ -28,6 +28,35 @@ const mappedOpenRoutes = mapRoutes(config.publicRoutes, 'api/controllers/');
 const mappedAuthRoutes = mapRoutes(config.privateRoutes, 'api/controllers/');
 const DB = dbService(environment, config.migrate).start();
 
+// add swagger doc, see https://github.com/pgroot/express-swagger-generator
+// eslint-disable-next-line import/no-extraneous-dependencies
+const expressSwagger = require('express-swagger-generator')(app);
+
+const options = {
+  swaggerDefinition: {
+    info: {
+      description: 'This is a sample server',
+      title: 'Swagger',
+      version: '1.0.0',
+    },
+    host: `localhost:${config.port}`,
+    basePath: '/',
+    produces: ['application/json', 'application/xml'],
+    schemes: ['http', 'https'],
+    securityDefinitions: {
+      JWT: {
+        type: 'apiKey',
+        in: 'header',
+        name: 'Authorization',
+        description: '',
+      },
+    },
+  },
+  basedir: __dirname, // app absolute path
+  files: ['./controllers/**/*.js'], // Path to the API handle folder
+};
+expressSwagger(options);
+
 // allow cross origin requests
 // configure to only allow requests from certain origins
 app.use(cors());
@@ -41,7 +70,7 @@ app.use(helmet({
 
 // serve static files
 app.use(express.static(path.join(__dirname, '../build'), {
-  setHeaders: (res, filePath, stat) => {
+  setHeaders: (res, filePath) => {
     console.info(`static file ${filePath} served`);
     res.set('x-timestamp', Date.now());
   },

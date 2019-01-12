@@ -7,6 +7,58 @@ const { Op } = require('sequelize');
 const { debug } = require('../../config');
 
 const UserController = () => {
+  /**
+   * @typedef UserModel
+   * @property {string} username.required - username or email of person making request - eg: John Doe
+   * @property {string} password.required - password of person making request - eg: John Doe
+   * @property {string} email - email of person making request - eg: John Doe
+   * @property {string} name - name of person making request - eg: John Doe
+   * @property {string} gender - gender of person making request - eg: John Doe
+   * @property {string} institute - institute of person making request - eg: John Doe
+   * @property {string} arrvalDate - arrvalDate of person making request - eg: John Doe
+   * @property {string} departureDate - departureDate of person making request - eg: John Doe
+   * @property {string} room - room of person making request - eg: John Doe
+   * @property {string} dietRequirement - dietRequirement of person making request - eg: John Doe
+   * @property {string} talkTitle - talkTitle of person making request - eg: John Doe
+   * @property {string} talkAbstract - talkAbstract of person making request - eg: John Doe
+   * @property {string} phone - phone of person making request - eg: John Doe
+   */
+
+  /**
+   * @typedef UserLoginReq
+   * @property {string} username.required - username or email of person making request - eg: John Doe
+   * @property {string} password.required - password of person making request - eg: John Doe
+   */
+
+  /**
+   * @typedef Response
+   * @property {string} code.required
+   * @property {string} message.required
+   * @property {object} data
+   */
+
+  /**
+   * @typedef Error
+   * @property {string} code.required
+   * @property {string} message.required
+   * @property {object} data
+   */
+
+  /**
+   * @typedef UserIdArray
+   * @property {array} id.required
+   */
+
+  /**
+   * This route will register new user
+   * @route POST /api/public/register
+   * @group UserController - User module
+   * @param {UserModel.model} userLoginReq.body.required - username/email and password for register
+   * @returns {Response.model} 200 - An object with 'code', 'message', 'data'
+   * @returns {Error.model}  default - Unexpected error
+   * @produces application/json
+   * @consumes application/json
+   */
   const register = async (req, res) => {
     const { body } = req;
     try {
@@ -24,6 +76,16 @@ const UserController = () => {
     }
   };
 
+  /**
+   * This route will for user login
+   * @route POST /api/public/login
+   * @group UserController - User module
+   * @param {UserLoginReq.model} userLoginReq.body.required - username/email and password for login
+   * @returns {Response.model} 200 - An object with 'code', 'message', 'data'
+   * @returns {Error.model}  default - Unexpected error
+   * @produces application/json
+   * @consumes application/json
+   */
   const login = async (req, res) => {
     // the username maybe the actural username or email
     const { username, password } = req.body;
@@ -66,6 +128,17 @@ const UserController = () => {
     });
   };
 
+  /**
+   * This route will get all users
+   * @route GET /api/private/users/
+   * @group UserController - User module
+   * @operationId findUsers
+   * @returns {Response.model} 200 - An object with 'code', 'message', 'data'
+   * @returns {Error.model}  default - Unexpected error
+   * @produces application/json
+   * @consumes application/json
+   * @security JWT
+   */
   const getAll = async (req, res) => {
     try {
       let { pageSize = 10, currentPage = 1 } = req.query;
@@ -99,6 +172,18 @@ const UserController = () => {
     }
   };
 
+  /**
+   * This route will get user by id
+   * @route GET /api/private/users/{id}
+   * @group UserController - User module
+   * @param {string} id.path.required - the id of the user
+   * @operationId findUserById
+   * @returns {Response.model} 200 - An object with 'code', 'message', 'data'
+   * @returns {Error.model}  default - Unexpected error
+   * @produces application/json
+   * @consumes application/json
+   * @security JWT
+   */
   const get = async (req, res) => {
     // params is part of an url
     const { id } = req.params;
@@ -121,6 +206,18 @@ const UserController = () => {
     }
   };
 
+  /**
+   * This route will create user
+   * @route POST /api/private/users/
+   * @group UserController - User module
+   * @param {UserModel.model} usermodel.body.required - the new user model
+   * @operationId createUser
+   * @produces application/json application/xml
+   * @consumes application/json application/xml
+   * @returns {Response.model} 200 - An array of user info
+   * @returns {Error.model}  default - Unexpected error
+   * @security JWT
+   */
   const create = async (req, res) => {
     // body is part of form-data
     const { body } = req;
@@ -140,6 +237,19 @@ const UserController = () => {
     }
   };
 
+  /**
+   * This route will update user
+   * @route PUT /api/private/users/{id}
+   * @group UserController - User module
+   * @param {string} id.path.required - the id of the user
+   * @param {UserModel.model} usermodel.body.required - the updated user model
+   * @operationId updateUser
+   * @produces application/json application/xml
+   * @consumes application/json application/xml
+   * @returns {Response.model} 200 - An array of user info
+   * @returns {Error.model}  default - Unexpected error
+   * @security JWT
+   */
   const update = async (req, res) => {
     // params is part of an url
     const { id } = req.params;
@@ -167,6 +277,18 @@ const UserController = () => {
     }
   };
 
+  /**
+   * This route will delete user by id
+   * @route DELETE /api/private/users/{id}
+   * @group UserController - User module
+   * @param {string} id.path.required - the id of the user
+   * @operationId deleteUser
+   * @produces application/json application/xml
+   * @consumes application/json application/xml
+   * @returns {Response.model} 200 - An array of user info
+   * @returns {Error.model}  default - Unexpected error
+   * @security JWT
+   */
   const destroy = async (req, res) => {
     // params is part of an url
     const { id } = req.params;
@@ -186,6 +308,18 @@ const UserController = () => {
     }
   };
 
+  /**
+   * This route will delete users by ids
+   * @route DELETE /api/private/users/
+   * @group UserController - User module
+   * @param {UserIdArray.model} id.body.required - the ids of the user
+   * @operationId deleteUsers
+   * @produces application/json application/xml
+   * @consumes application/json application/xml
+   * @returns {Response.model} 200 - An array of user info
+   * @returns {Error.model}  default - Unexpected error
+   * @security JWT
+   */
   const batchDestroy = async (req, res) => {
     // params is part of an url
     const { id = [] } = req.body;
